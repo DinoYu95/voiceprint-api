@@ -1,0 +1,10 @@
+mysql:
+  database: voiceprint_db
+  host: 127.0.0.1
+  password: '123456'
+  port: 3306
+  user: root
+server:
+  authorization: 758d5b0e-8acc-421b-ac44-d3b09064bebd
+  host: 0.0.0.0
+  port: 8005

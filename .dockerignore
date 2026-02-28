@@ -1,0 +1,11 @@
+# 不打进镜像
+.git
+.github
+*.pyc
+__pycache__
+logs
+deploy
+.env
+.env.*
+*.md
+.gitignore

@@ -1,0 +1,30 @@
+# 声纹服务 voiceprint-api 部署：从源码构建（安装 requirements）并启动
+# 使用前：在 data/ 下放置 .voiceprint.yaml 配置；可选 cp .env.example .env 修改端口
+# 启动：cd deploy && docker compose up -d [--build]
+#
+# 不设 VOICEPRINT_IMAGE 时使用本地构建；设则拉取该镜像。
+
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: ${VOICEPRINT_IMAGE:-voiceprint-api:latest}
+    container_name: voiceprint-api
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+    ports:
+      - "${APP_PORT:-8005}:8005"
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+      - ./data:/app/data
+    networks:
+      - voiceprint
+
+networks:
+  voiceprint:
+    driver: bridge
