@@ -1,5 +1,5 @@
-# pyarrow>=21 移除了 PyExtensionType，导致 datasets/modelscope 报错，需锁定 <21
-pyarrow>=14.0.0,<21.0.0
+# pyarrow>=21 移除了 PyExtensionType，导致 datasets/modelscope 报错，必须锁定 15.x
+pyarrow==15.0.2
 modelscope==1.13.0
 datasets==2.14.5
 numpy==1.23.5
