@@ -54,8 +54,19 @@ class Settings:
 
     @property
     def mysql(self) -> Dict[str, Any]:
-        """MySQL数据库配置"""
-        return self._config.get("mysql", {})
+        """MySQL数据库配置；环境变量 MYSQL_HOST/PORT/USER/PASSWORD/DATABASE 可覆盖（Docker 部署时连宿主机 MySQL 用）"""
+        base = dict(self._config.get("mysql", {}))
+        if os.environ.get("MYSQL_HOST"):
+            base["host"] = os.environ["MYSQL_HOST"]
+        if os.environ.get("MYSQL_PORT"):
+            base["port"] = int(os.environ["MYSQL_PORT"])
+        if os.environ.get("MYSQL_USER"):
+            base["user"] = os.environ["MYSQL_USER"]
+        if os.environ.get("MYSQL_PASSWORD") is not None:
+            base["password"] = os.environ["MYSQL_PASSWORD"]
+        if os.environ.get("MYSQL_DATABASE"):
+            base["database"] = os.environ["MYSQL_DATABASE"]
+        return base
 
     @property
     def voiceprint(self) -> Dict[str, Any]:

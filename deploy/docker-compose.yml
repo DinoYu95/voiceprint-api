@@ -16,6 +16,15 @@ services:
     restart: always
     environment:
       TZ: Asia/Shanghai
+      # 覆盖 data/.voiceprint.yaml 中的 MySQL，连宿主机上的 xiaozhi MySQL（宿主机 3306）
+      MYSQL_HOST: host.docker.internal
+      MYSQL_PORT: "3306"
+      # 若与 yaml 一致可省略；不一致时在这里指定
+      # MYSQL_USER: root
+      # MYSQL_PASSWORD: "123456"
+      # MYSQL_DATABASE: voiceprint_db
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "${APP_PORT:-8005}:8005"
     security_opt:

@@ -40,7 +40,15 @@ docker compose up -d --build
 
 ---
 
-## 4. 常用命令
+## 4. MySQL：本地 vs Docker
+
+- **本地直接跑**：`data/.voiceprint.yaml` 里 MySQL 保持 `host: 127.0.0.1`，连本机 MySQL（或本机 xiaozhi 的 MySQL 映射到 3306）。
+- **Docker 部署**：compose 里已设置 `MYSQL_HOST=host.docker.internal`、`MYSQL_PORT=3306`，会覆盖 yaml，从而连**宿主机**上的 3306。因此需要 xiaozhi-esp32-server 的 MySQL 暴露到宿主机（在 xiaozhi 的 deploy 里 `MYSQL_EXPOSE_PORT=3306` 即可）。  
+  本地仍用 yaml 的 127.0.0.1，无需改配置。
+
+---
+
+## 5. 常用命令
 
 ```bash
 cd deploy
