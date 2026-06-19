@@ -1,0 +1,40 @@
+# 国内生产：仅声纹服务，MySQL 使用阿里云 RDS（见 .env.prod）
+# 测试环境仍用 ../docker-compose.yml（MySQL 走 host.docker.internal）
+#
+# 使用前：cp .env.example .env.prod，填齐【必填】项
+# 启动：docker compose --env-file .env.prod up -d [--build]
+#
+# 需先启动 xiaozhi-esp32-server/deploy/prod（创建共享网络 zhiban-prod）
+
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    image: ${VOICEPRINT_IMAGE:-voiceprint-api:latest}
+    container_name: voiceprint-api
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_HOST: ${MYSQL_RDS_HOST}
+      MYSQL_PORT: ${MYSQL_RDS_PORT:-3306}
+      MYSQL_USER: ${MYSQL_RDS_USER}
+      MYSQL_PASSWORD: ${MYSQL_RDS_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-voiceprint_db}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "${APP_PORT:-8005}:8005"
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+      - ../data:/app/data
+    networks:
+      - prod
+
+networks:
+  prod:
+    external: true
+    name: zhiban-prod
