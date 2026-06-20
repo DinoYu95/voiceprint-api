@@ -2,7 +2,8 @@
 # 测试环境仍用 ../docker-compose.yml（MySQL 走 host.docker.internal）
 #
 # 使用前：cp .env.example .env.prod，填齐【必填】项
-# 启动：docker compose --env-file .env.prod up -d [--build]
+# 启动：docker compose --env-file .env.prod up -d
+# 镜像：deploy/prod/images 构建 push ACR，.env.prod 填 VOICEPRINT_IMAGE，勿 --build
 #
 # 需先启动 xiaozhi-esp32-server/deploy/prod（创建共享网络 zhiban-prod）
 
@@ -10,10 +11,7 @@ version: '3.8'
 
 services:
   app:
-    build:
-      context: ../..
-      dockerfile: Dockerfile
-    image: ${VOICEPRINT_IMAGE:-voiceprint-api:latest}
+    image: ${VOICEPRINT_IMAGE:?set VOICEPRINT_IMAGE in .env.prod — build via deploy/prod/images/voiceprint-api/build-app.sh}
     container_name: voiceprint-api
     restart: always
     environment:
